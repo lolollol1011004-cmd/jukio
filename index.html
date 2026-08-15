@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>인천중기경찰서 | 통합관리 시스템 현황</title>
+<style>
+  /* =========================================================
+     색상 / 톤 전부 여기 :root 안에서만 바꾸면 전체 사이트에 반영됩니다.
+     ========================================================= */
+  :root{
+    --navy-deep:#0b1f4a;
+    --navy:#0f2a63;
+    --navy-mid:#173a82;
+    --blue-accent:#1c4fd6;
+    --gold:#f0b429;
+    --ink:#1b2430;
+    --paper:#eef1f7;
+    --line:#d7dce6;
+    --ok-bg:#e6f6ea;
+    --ok-fg:#1c8a45;
+    --ok-border:#a9dfba;
+    --warn-fg:#b3261e;
+    --mono:'Consolas','SFMono-Regular',Menlo,monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    color:var(--ink);
+    font-size:14px;
+    line-height:1.5;
+  }
+  a{color:inherit;text-decoration:none;cursor:pointer;}
+
+  /* ---------- top alert strip ---------- */
+  .alert-strip{
+    background:var(--navy-deep);color:#cfe0ff;font-size:12px;
+    padding:6px 18px;display:flex;justify-content:space-between;letter-spacing:.2px;
+  }
+  .alert-strip b{color:#ffd873;font-weight:700;}
+  .alert-strip .right a{margin-left:14px;color:#a9bde3;}
+  .alert-strip .right a:hover{color:#fff;text-decoration:underline;}
+
+  /* ---------- header ---------- */
+  header.masthead{background:#ffffff;border-bottom:4px solid var(--gold);}
+  .masthead-inner{
+    max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;
+  }
+  .brand{display:flex;align-items:center;gap:14px;}
+  .brand-mark{
+    width:52px;height:52px;border-radius:50%;
+    background:linear-gradient(160deg,var(--navy-mid),var(--navy-deep));
+    color:#fff;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:13px;letter-spacing:.5px;border:2px solid var(--gold);text-align:center;
+  }
+  .brand-text .title{font-size:26px;font-weight:800;color:var(--navy-deep);letter-spacing:-.5px;}
+  .brand-text .sub{font-size:11.5px;color:#7a8194;letter-spacing:1.5px;font-weight:600;margin-top:2px;}
+  .lang-row{display:flex;gap:10px;font-size:12px;color:#8a90a2;align-items:center;}
+  .lang-row span{padding:0 6px;border-right:1px solid #d5d9e3;}
+  .lang-row span:last-child{border-right:none;}
+
+  /* ---------- nav ---------- */
+  nav.mainnav{background:var(--navy);}
+  .mainnav-inner{max-width:1200px;margin:0 auto;display:flex;}
+  .mainnav-inner a{
+    flex:1;text-align:center;padding:13px 6px;color:#dbe4fb;
+    font-size:13.5px;font-weight:600;letter-spacing:.2px;
+    border-right:1px solid rgba(255,255,255,.08);
+  }
+  .mainnav-inner a:hover{background:var(--navy-mid);color:#fff;}
+  .mainnav-inner a.active{background:var(--blue-accent);color:#fff;}
+
+  .subbar{background:#dfe6f5;border-bottom:1px solid var(--line);font-size:12px;color:#5b6577;}
+  .subbar-inner{max-width:1200px;margin:0 auto;padding:7px 18px;display:flex;justify-content:space-between;}
+  .subbar-inner b{color:var(--navy-deep);}
+  .subbar-inner .notice{color:#8a5a00;}
+
+  /* ---------- layout ---------- */
+  .layout{
+    max-width:1200px;margin:0 auto;
+    display:grid;grid-template-columns:220px 1fr 260px;gap:22px;padding:22px 18px 40px;
+  }
+  @media (max-width:920px){ .layout{grid-template-columns:1fr;} }
+
+  /* ---------- sidebar left ---------- */
+  .side-block{margin-bottom:26px;}
+  .side-block h3{font-size:14px;color:var(--blue-accent);border-bottom:2px solid var(--navy);padding-bottom:8px;margin:0 0 10px;}
+  .side-block ul{list-style:none;margin:0;padding:0;}
+  .side-block li{padding:7px 0 7px 14px;font-size:13px;color:#3c4152;position:relative;border-bottom:1px dashed #dde2ec;}
+  .side-block li::before{content:"▪";position:absolute;left:0;color:#9aa6c2;font-size:10px;top:9px;}
+  .side-block li.current{color:var(--blue-accent);font-weight:700;}
+  .side-block li a:hover{text-decoration:underline;}
+
+  /* ---------- main / pages ---------- */
+  main{min-width:0;}
+  .page{display:none;}
+  .page.active{display:block;}
+
+  .breadcrumb{font-size:12px;color:#8a90a2;margin-bottom:14px;}
+  .breadcrumb b{color:var(--navy-deep);}
+
+  .page-title-row{
+    display:flex;align-items:baseline;gap:10px;border-bottom:3px solid var(--navy-deep);
+    padding-bottom:10px;margin-bottom:18px;
+  }
+  .page-title-row h1{font-size:21px;margin:0;color:var(--navy-deep);}
+  .page-title-row .tag{
+    font-size:11px;color:#fff;background:var(--blue-accent);padding:3px 8px;border-radius:3px;
+    letter-spacing:.5px;font-weight:700;
+  }
+
+  .status-card{
+    display:flex;align-items:center;gap:18px;background:#fff;border:1px solid var(--line);
+    border-radius:6px;padding:20px 22px;margin-bottom:22px;box-shadow:0 1px 3px rgba(20,30,60,.05);
+  }
+  .status-icon{
+    width:46px;height:46px;border-radius:50%;background:var(--ok-bg);border:2px solid var(--ok-border);
+    display:flex;align-items:center;justify-content:center;color:var(--ok-fg);font-size:24px;flex:none;
+  }
+  .status-card .txt{flex:1;}
+  .status-card .txt .headline{font-size:17px;font-weight:800;color:var(--ok-fg);}
+  .status-card .txt .desc{font-size:12.5px;color:#6a7185;margin-top:3px;}
+  .refresh-btn{
+    border:1px solid #c3cadb;background:#f4f6fb;color:#374056;padding:9px 14px;border-radius:5px;
+    font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;
+  }
+  .refresh-btn:hover{background:#e8ecf7;}
+  .refresh-btn:active{transform:translateY(1px);}
+  .refresh-btn .spin{display:inline-block;margin-right:5px;}
+  .refresh-btn.loading .spin{animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  h2.section-h{font-size:15px;color:var(--navy-deep);margin:0 0 10px;}
+
+  table.status-table{
+    width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);font-size:13px;margin-bottom:26px;
+  }
+  table.status-table th{
+    background:#eef2fa;color:#4a5268;font-size:12.5px;padding:10px 12px;
+    border-bottom:2px solid var(--navy-deep);text-align:left;
+  }
+  table.status-table td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle;}
+  table.status-table tr:last-child td{border-bottom:none;}
+  .svc-name{font-weight:700;color:var(--ink);}
+  .pill-ok{
+    display:inline-block;background:var(--ok-bg);color:var(--ok-fg);border:1px solid var(--ok-border);
+    border-radius:12px;padding:3px 12px;font-size:12px;font-weight:700;
+  }
+  .pill-warn{
+    display:inline-block;background:#fdeceb;color:var(--warn-fg);border:1px solid #f3b9b4;
+    border-radius:12px;padding:3px 12px;font-size:12px;font-weight:700;
+  }
+  .detail{color:#6a7185;font-size:12.5px;}
+
+  .terminal{background:#0d1526;border:1px solid #1f2b45;border-radius:6px;overflow:hidden;}
+  .terminal-head{
+    background:#11213f;color:#c7d3ee;font-size:12.5px;font-weight:700;padding:10px 14px;
+    border-bottom:1px solid #1f2b45;display:flex;justify-content:space-between;align-items:center;
+  }
+  .terminal-head .dot{width:8px;height:8px;border-radius:50%;background:#28c76f;display:inline-block;margin-right:7px;box-shadow:0 0 6px #28c76f;}
+  #log{font-family:var(--mono);font-size:12px;color:#8fd19e;padding:14px;height:190px;overflow-y:auto;}
+  #log .line{margin-bottom:6px;white-space:pre-wrap;}
+  #log .t{color:#5c6b8a;}
+  #log .lvl-info{color:#6fb7ff;}
+  #log .lvl-ok{color:#8fd19e;}
+  #log .lvl-warn{color:#f0b429;}
+
+  /* ---------- sidebar right ---------- */
+  .promo-box{
+    background:linear-gradient(160deg,var(--navy-mid),var(--navy-deep));color:#fff;border-radius:6px;
+    padding:16px;margin-bottom:16px;
+  }
+  .promo-box .k{font-size:12.5px;font-weight:700;opacity:.85;}
+  .promo-box .v{font-size:14px;font-weight:800;margin-top:4px;color:#ffd873;}
+
+  .report-box{
+    background:#fff;border:1px solid var(--line);border-radius:6px;padding:16px;text-align:center;margin-bottom:16px;
+  }
+  .report-box .lbl{font-size:12.5px;color:#6a7185;margin-bottom:6px;}
+  .report-box .num{font-size:30px;font-weight:800;color:#d64545;letter-spacing:1px;}
+  .report-box .sub{font-size:11px;color:#9aa0b0;margin-top:6px;line-height:1.5;}
+
+  .quicklinks{background:#fff;border:1px solid var(--line);border-radius:6px;padding:16px;margin-bottom:16px;}
+  .quicklinks h4{font-size:13px;margin:0 0 10px;color:var(--navy-deep);}
+  .quicklinks li{list-style:none;font-size:12.5px;padding:6px 0;color:#3c4152;border-bottom:1px dashed #e3e7f0;}
+  .quicklinks li:last-child{border-bottom:none;}
+  .quicklinks li::before{content:"▶ ";color:var(--blue-accent);font-size:10px;}
+
+  /* ---------- generic content blocks used inside sub-pages ---------- */
+  .card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:20px;margin-bottom:20px;}
+  .greeting-wrap{display:flex;gap:22px;}
+  .greeting-photo{
+    width:150px;height:190px;flex:none;border-radius:4px;
+    background:linear-gradient(160deg,#c7d0e6,#9aa6c2);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;text-align:center;
+  }
+  .greeting-body p{margin:0 0 12px;font-size:13.5px;color:#3c4152;line-height:1.8;}
+  .signature{text-align:right;font-size:13.5px;font-weight:700;color:var(--navy-deep);margin-top:10px;}
+
+  .officer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media (max-width:700px){.officer-grid{grid-template-columns:1fr;}}
+  .officer-card{background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;text-align:center;}
+  .officer-photo{
+    height:120px;background:linear-gradient(160deg,var(--navy-mid),var(--navy-deep));
+    display:flex;align-items:center;justify-content:center;color:#ffd873;font-size:34px;font-weight:800;
+  }
+  .officer-info{padding:12px;}
+  .officer-info .name{font-weight:800;font-size:14px;color:var(--navy-deep);}
+  .officer-info .rank{font-size:12px;color:#6a7185;margin:2px 0 8px;}
+  .officer-info .merit{font-size:12px;color:#3c4152;line-height:1.6;}
+
+  .search-row{display:flex;gap:8px;margin-bottom:14px;}
+  .search-row input{
+    flex:1;padding:9px 12px;border:1px solid #c3cadb;border-radius:5px;font-size:13px;background:#fff;
+  }
+  .search-row button{
+    padding:9px 16px;border:none;background:var(--blue-accent);color:#fff;border-radius:5px;
+    font-weight:700;font-size:13px;cursor:pointer;
+  }
+  .search-row button:hover{background:#1642b8;}
+
+  .orgchart{display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px 0;}
+  .org-node{
+    background:var(--navy-deep);color:#fff;padding:10px 22px;border-radius:5px;font-weight:700;font-size:13.5px;
+    border:2px solid var(--gold);
+  }
+  .org-branch{display:flex;gap:28px;margin-top:8px;flex-wrap:wrap;justify-content:center;}
+  .org-node.sub{background:var(--navy-mid);font-size:12.5px;padding:8px 16px;border-color:#c3cadb;}
+  .org-connector{width:2px;height:18px;background:#9aa6c2;}
+
+  .info-block h3{font-size:14.5px;color:var(--navy-deep);margin:22px 0 8px;}
+  .info-block h3:first-child{margin-top:0;}
+  .info-block p, .info-block li{font-size:13px;color:#3c4152;line-height:1.8;}
+
+  /* ---------- modal ---------- */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;background:rgba(10,16,35,.55);z-index:100;
+    align-items:center;justify-content:center;padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:#fff;border-radius:8px;max-width:480px;width:100%;overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,.3);
+  }
+  .modal-head{
+    background:linear-gradient(160deg,var(--navy-mid),var(--navy-deep));color:#fff;padding:18px 22px;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .modal-head h3{margin:0;font-size:16px;}
+  .modal-head .sub{font-size:11.5px;color:#b9c6ea;margin-top:3px;}
+  .modal-close{background:none;border:none;color:#cfe0ff;font-size:20px;cursor:pointer;line-height:1;}
+  .modal-close:hover{color:#fff;}
+  .modal-body{padding:22px;}
+  .modal-body label{display:block;font-size:12.5px;font-weight:700;color:var(--navy-deep);margin-bottom:6px;}
+  .modal-body input, .modal-body select, .modal-body textarea{
+    width:100%;padding:9px 11px;border:1px solid #c3cadb;border-radius:5px;font-size:13px;
+    margin-bottom:16px;font-family:inherit;
+  }
+  .modal-body textarea{resize:vertical;min-height:70px;}
+  .modal-submit{
+    width:100%;padding:11px;border:none;background:var(--blue-accent);color:#fff;font-weight:700;
+    font-size:13.5px;border-radius:5px;cursor:pointer;
+  }
+  .modal-submit:hover{background:#1642b8;}
+  .modal-success{display:none;text-align:center;padding:10px 0 4px;}
+  .modal-success.show{display:block;}
+  .modal-success .ok-icon{
+    width:52px;height:52px;border-radius:50%;background:var(--ok-bg);border:2px solid var(--ok-border);
+    color:var(--ok-fg);font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;
+  }
+  .modal-success p{font-size:13.5px;color:#3c4152;text-align:center;line-height:1.7;}
+
+  /* ---------- CBT 시험 단계 ---------- */
+  .modal-box.exam-wide{max-width:560px;}
+  .exam-step{display:none;}
+  .exam-step.show{display:block;}
+  .exam-notice{
+    background:#eef2fa;border:1px solid var(--line);border-radius:5px;padding:12px 14px;
+    font-size:12px;color:#4a5268;line-height:1.7;margin-bottom:16px;
+  }
+  .exam-topbar{
+    display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:12.5px;color:#6a7185;
+  }
+  .exam-topbar .progress-txt{font-weight:700;color:var(--navy-deep);}
+  .exam-timer{
+    font-family:var(--mono);font-weight:800;color:var(--warn-fg);font-size:14px;
+    background:#fdeceb;border:1px solid #f3b9b4;padding:4px 10px;border-radius:5px;
+  }
+  .progress-bar{height:6px;background:#e3e7f0;border-radius:3px;overflow:hidden;margin-bottom:20px;}
+  .progress-bar-fill{height:100%;background:var(--blue-accent);width:0%;transition:width .3s;}
+  .exam-question{font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:14px;line-height:1.6;}
+  .exam-options{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+  .exam-option{
+    display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid #c3cadb;
+    border-radius:5px;cursor:pointer;font-size:13px;color:#3c4152;
+  }
+  .exam-option:hover{background:#f4f6fb;}
+  .exam-option.selected{border-color:var(--blue-accent);background:#eaf0ff;color:var(--navy-deep);font-weight:700;}
+  .exam-option input{accent-color:var(--blue-accent);}
+  .exam-nav{display:flex;justify-content:space-between;gap:10px;}
+  .exam-nav button{
+    flex:1;padding:11px;border-radius:5px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid #c3cadb;
+    background:#f4f6fb;color:#374056;
+  }
+  .exam-nav button.primary{background:var(--blue-accent);color:#fff;border-color:var(--blue-accent);}
+  .exam-nav button.primary:hover{background:#1642b8;}
+  .exam-nav button:disabled{opacity:.4;cursor:not-allowed;}
+
+  .result-score{text-align:center;padding:6px 0 18px;}
+  .result-score .num{font-size:44px;font-weight:800;color:var(--navy-deep);}
+  .result-score .badge-pass{color:var(--ok-fg);background:var(--ok-bg);border:1px solid var(--ok-border);}
+  .result-score .badge-fail{color:var(--warn-fg);background:#fdeceb;border:1px solid #f3b9b4;}
+  .result-score .badge{
+    display:inline-block;margin-top:8px;padding:5px 16px;border-radius:14px;font-size:13px;font-weight:800;
+  }
+  .result-info{background:#f8f9fc;border:1px solid var(--line);border-radius:5px;padding:14px;font-size:12.5px;color:#4a5268;margin-bottom:16px;line-height:1.9;}
+  .result-info b{color:var(--navy-deep);}
+
+  /* ---------- 채용공고 게시판 (공무원 채용시스템 스타일) ---------- */
+  .recruit-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+  .recruit-tabs button{
+    border:1px solid #c3cadb;background:#fff;color:#4a5268;padding:9px 16px;border-radius:20px;
+    font-size:12.5px;font-weight:700;cursor:pointer;
+  }
+  .recruit-tabs button:hover{background:#f4f6fb;}
+  .recruit-tabs button.active{background:var(--navy-deep);border-color:var(--navy-deep);color:#fff;}
+  .recruit-list{background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-bottom:20px;}
+  .recruit-row{
+    display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line);font-size:13px;cursor:pointer;
+  }
+  .recruit-row:last-child{border-bottom:none;}
+  .recruit-row:hover{background:#f7f9fd;}
+  .recruit-row .badge{
+    flex:none;font-size:11px;font-weight:800;padding:3px 9px;border-radius:3px;color:#fff;background:var(--blue-accent);white-space:nowrap;
+  }
+  .recruit-row .badge.top{background:#c23636;}
+  .recruit-row .title{flex:1;color:var(--ink);font-weight:600;}
+  .recruit-row .title .new{color:#d64545;font-weight:800;margin-left:4px;}
+  .recruit-row .date{flex:none;color:#9aa0b0;font-size:12px;}
+  .recruit-cta{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;background:linear-gradient(160deg,var(--navy-mid),var(--navy-deep));
+    color:#fff;border-radius:6px;padding:20px 22px;margin-bottom:24px;
+  }
+  .recruit-cta .txt b{display:block;font-size:16px;margin-bottom:4px;}
+  .recruit-cta .txt span{font-size:12px;color:#c3d2f5;}
+  .recruit-cta button{
+    flex:none;background:var(--gold);color:#3a2a00;border:none;padding:12px 22px;border-radius:5px;
+    font-weight:800;font-size:13.5px;cursor:pointer;
+  }
+  .recruit-cta button:hover{filter:brightness(1.05);}
+
+  /* ---------- 결과조회 / 관리자 인증 ---------- */
+  .lookup-box{display:flex;gap:8px;margin-bottom:18px;}
+  .lookup-box input{flex:1;padding:10px 12px;border:1px solid #c3cadb;border-radius:5px;font-size:13px;}
+  .lookup-box button{padding:10px 18px;border:none;background:var(--blue-accent);color:#fff;border-radius:5px;font-weight:700;font-size:13px;cursor:pointer;}
+  .lookup-result{background:#fff;border:1px solid var(--line);border-radius:6px;padding:18px 20px;font-size:13px;line-height:1.9;}
+  .lookup-empty{color:#9aa0b0;font-size:12.5px;text-align:center;padding:26px 0;}
+  .admin-locked{text-align:center;padding:60px 20px;color:#6a7185;font-size:13px;}
+  .admin-locked button{margin-top:14px;padding:10px 20px;border:none;background:var(--navy-deep);color:#fff;border-radius:5px;font-weight:700;cursor:pointer;}
+  .admin-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:12.5px;color:#6a7185;}
+  .admin-toolbar button{border:1px solid #c3cadb;background:#fff;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px;}
+  .code-chip{display:inline-block;font-family:var(--mono);background:#eef2fa;border:1px solid var(--line);color:var(--navy-deep);padding:6px 12px;border-radius:5px;font-weight:800;letter-spacing:1px;}
+  .del-btn{border:1px solid #f3b9b4;background:#fdeceb;color:var(--warn-fg);padding:4px 9px;border-radius:4px;font-size:11.5px;cursor:pointer;}
+
+  footer{border-top:1px solid var(--line);margin-top:10px;}
+  .footer-notice{background:#fbf3d9;color:#7a5b00;font-size:12px;padding:10px 18px;display:flex;justify-content:space-between;}
+  .footer-notice a{text-decoration:underline;}
+  .footer-bottom{background:var(--navy-deep);color:#9fb0d6;font-size:11.5px;text-align:center;padding:16px 18px;}
+  .footer-bottom .disclaimer{display:block;margin-top:6px;color:#6f83b3;font-size:11px;}
+</style>
+</head>
+<body>
+
+  <div class="alert-strip">
+    <div><b>[시스템 알림]</b> 인천중기경찰서 통합관리 시스템 접속 중</div>
+    <div class="right"><a href="#">이용약관</a><a href="#">개인정보처리방침</a></div>
+  </div>
+
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="brand">
+        <div class="brand-mark">인천<br>중기</div>
+        <div class="brand-text">
+          <div class="title">인천중기경찰서</div>
+          <div class="sub">INCHEON JUNGGI POLICE DEPARTMENT · FACTION SYSTEM</div>
+        </div>
+      </div>
+      <div class="lang-row"><span>서버 규정</span><span>가입 안내</span><span>디스코드 참여</span></div>
+    </div>
+  </header>
+
+  <!-- ================= 상단 메인 네비게이션 ================= -->
+  <nav class="mainnav">
+    <div class="mainnav-inner" id="mainNav">
+      <a data-page="status" class="active">메인 포탈</a>
+      <a data-page="chief">서장 인사말</a>
+      <a data-page="honor">우수대원</a>
+      <a data-page="recruit">채용공고</a>
+      <a data-page="missing">치매노인 실종명단</a>
+      <a data-page="orgchart">조직도</a>
+      <a data-page="wanted">지명수배 조회</a>
+      <a data-page="info">이용안내</a>
+    </div>
+  </nav>
+
+  <div class="subbar">
+    <div class="subbar-inner">
+      <div><b>모니터링</b></div>
+      <div class="notice">[안내] 본 사이트는 RP 서버 운영을 위한 가상 시스템입니다.</div>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside>
+      <div class="side-block">
+        <h3>온라인 서비스</h3>
+        <ul>
+          <li><a href="#">실행 신청</a></li>
+          <li><a href="#">계정 본인확인</a></li>
+          <li><a data-page="recruit" onclick="showPage('recruit', null)">팩션원 채용 온라인 응시</a></li>
+          <li><a href="#">부서 전출 지원신청</a></li>
+          <li class="current"><a data-page="status" onclick="showPage('status', null)">접속상태 확인</a></li>
+        </ul>
+      </div>
+      <div class="side-block">
+        <h3>전산정보</h3>
+        <ul>
+          <li><a href="#">대원 정보 DB</a></li>
+          <li><a data-page="lookup" onclick="showPage('lookup', null)">시험 결과조회</a></li>
+          <li><a data-page="admin" onclick="showPage('admin', null)">관리자 페이지</a></li>
+        </ul>
+      </div>
+      <div class="side-block">
+        <h3>이용안내</h3>
+        <ul>
+          <li><a data-page="info" onclick="showPage('info', null)">서비스 이용약관</a></li>
+          <li><a data-page="info" onclick="showPage('info', null)">개인정보 처리방침</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main>
+
+      <!-- ============ PAGE: 접속상태 (기본 화면) ============ -->
+      <section class="page active" id="page-status">
+        <div class="breadcrumb">HOME &gt; 온라인 서비스 &gt; <b>접속상태 확인</b></div>
+        <div class="page-title-row"><h1>전산망 실시간 운영 상태 (Status)</h1><span class="tag">SYSTEM MONITORING</span></div>
+
+        <div class="status-card">
+          <div class="status-icon">✓</div>
+          <div class="txt">
+            <div class="headline">전체 시스템 정상 가동 중</div>
+            <div class="desc">모든 API 및 내부 데이터베이스가 정상적으로 통신 중입니다.</div>
+          </div>
+          <button class="refresh-btn" id="refreshBtn"><span class="spin">⟳</span>상태 새로고침</button>
+        </div>
+
+        <h2 class="section-h">세부 서비스별 현황</h2>
+        <table class="status-table">
+          <thead><tr><th style="width:22%">서비스 항목</th><th style="width:14%">상태</th><th>상세 정보 및 레이턴시</th></tr></thead>
+          <tbody>
+            <tr><td class="svc-name">인천중기경찰서 웹 포털</td><td><span class="pill-ok">정상</span></td><td class="detail">서버 응답: 12ms / 패킷 유실률 0%</td></tr>
+            <tr><td class="svc-name">대원 정보 DB 접속망</td><td><span class="pill-ok">정상</span></td><td class="detail">DB Query 응답: 45ms / 안정적 연결</td></tr>
+            <tr><td class="svc-name">Discord OAuth 인증 API</td><td><span class="pill-ok">정상</span></td><td class="detail">API 연결 대기 중 / 통신 문제 없음</td></tr>
+            <tr><td class="svc-name">대원 필기시험 서버</td><td><span class="pill-ok">정상</span></td><td class="detail">문제 출제 및 저장 시스템 가동 중</td></tr>
+          </tbody>
+        </table>
+
+        <div class="terminal">
+          <div class="terminal-head"><span><span class="dot"></span>System Event Log</span><span style="color:#5c6b8a;font-weight:400;">live</span></div>
+          <div id="log"></div>
+        </div>
+      </section>
+
+      <!-- ============ PAGE: 서장 인사말 ============ -->
+      <section class="page" id="page-chief">
+        <div class="breadcrumb">HOME &gt; 인천중기경찰서 &gt; <b>서장 인사말</b></div>
+        <div class="page-title-row"><h1>서장 인사말</h1><span class="tag">GREETING</span></div>
+        <div class="card greeting-wrap">
+          <div class="greeting-photo">[서장 사진]</div>
+          <div class="greeting-body">
+            <p>안녕하십니까, 인천중기경찰서장 [성명]입니다.</p>
+            <p>[여기에 실제 서버 컨셉에 맞는 인사말을 적어주세요. 예: 우리 서는 시민 여러분과 대원들이 함께 만들어가는 신뢰받는 치안 공동체를 지향합니다. 앞으로도 투명하고 공정한 법 집행을 통해 여러분 곁을 지키겠습니다.]</p>
+            <p>[둘째 문단 — 팩션 운영 방침이나 신입 대원 환영 메시지 등을 추가하셔도 좋습니다.]</p>
+            <div class="signature">인천중기경찰서장 &nbsp; [성명] &nbsp; (인)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PAGE: 우수대원 ============ -->
+      <section class="page" id="page-honor">
+        <div class="breadcrumb">HOME &gt; 인천중기경찰서 &gt; <b>우수대원</b></div>
+        <div class="page-title-row"><h1>이달의 우수대원</h1><span class="tag">HONOR</span></div>
+        <div class="officer-grid">
+          <div class="officer-card">
+            <div class="officer-photo">★</div>
+            <div class="officer-info"><div class="name">[대원 성명]</div><div class="rank">[계급 / 소속]</div><div class="merit">[공적 내용을 적어주세요]</div></div>
+          </div>
+          <div class="officer-card">
+            <div class="officer-photo">★</div>
+            <div class="officer-info"><div class="name">[대원 성명]</div><div class="rank">[계급 / 소속]</div><div class="merit">[공적 내용을 적어주세요]</div></div>
+          </div>
+          <div class="officer-card">
+            <div class="officer-photo">★</div>
+            <div class="officer-info"><div class="name">[대원 성명]</div><div class="rank">[계급 / 소속]</div><div class="merit">[공적 내용을 적어주세요]</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PAGE: 채용공고 (게시판형) ============ -->
+      <section class="page" id="page-recruit">
+        <div class="breadcrumb">HOME &gt; 온라인 서비스 &gt; <b>채용공고</b></div>
+        <div class="page-title-row"><h1>팩션원 채용정보</h1><span class="tag">RECRUIT NOTICE</span></div>
+
+        <div class="recruit-cta">
+          <div class="txt">
+            <b>인천중기경찰서 신입 대원 온라인 CBT 응시</b>
+            <span>총 <span id="recruitQCount">5</span>문항 · 제한시간 10분 · 60점 이상 합격</span>
+          </div>
+          <button onclick="openModal()">온라인 응시하기</button>
+        </div>
+
+        <div class="recruit-tabs" id="recruitTabs">
+          <button class="active" data-cat="전체" onclick="filterRecruit('전체', this)">전체</button>
+          <button data-cat="공채" onclick="filterRecruit('공채', this)">공채</button>
+          <button data-cat="특채" onclick="filterRecruit('특채', this)">특채</button>
+          <button data-cat="안내" onclick="filterRecruit('안내', this)">안내</button>
+        </div>
+
+        <div class="recruit-list" id="recruitList"></div>
+
+        <p style="font-size:11.5px;color:#9aa0b0;">※ RP 서버 채용 절차 안내를 위한 가상 게시판입니다. 아래 목록은 코드에서 자유롭게 추가·삭제할 수 있습니다.</p>
+      </section>
+
+      <!-- ============ PAGE: 치매노인 실종명단 ============ -->
+      <section class="page" id="page-missing">
+        <div class="breadcrumb">HOME &gt; 온라인 서비스 &gt; <b>치매노인 실종명단</b></div>
+        <div class="page-title-row"><h1>치매노인·실종자 명단</h1><span class="tag">RP LIST</span></div>
+        <div class="search-row">
+          <input type="text" id="missingSearch" placeholder="이름으로 검색...">
+          <button onclick="filterTable('missingSearch','missingBody')">검색</button>
+        </div>
+        <table class="status-table">
+          <thead><tr><th>성명</th><th>연령</th><th>실종 일시</th><th>실종 장소</th><th>상태</th></tr></thead>
+          <tbody id="missingBody">
+            <tr><td class="svc-name">[성명]</td><td>[나이]세</td><td>[YYYY-MM-DD HH:MM]</td><td>[실종 장소]</td><td><span class="pill-warn">수색중</span></td></tr>
+            <tr><td class="svc-name">[성명]</td><td>[나이]세</td><td>[YYYY-MM-DD HH:MM]</td><td>[실종 장소]</td><td><span class="pill-ok">발견</span></td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:11.5px;color:#9aa0b0;">※ 서버 내 롤플레이 진행을 위한 가상 명단입니다. 실제 인물과 무관합니다.</p>
+      </section>
+
+      <!-- ============ PAGE: 조직도 ============ -->
+      <section class="page" id="page-orgchart">
+        <div class="breadcrumb">HOME &gt; 인천중기경찰서 &gt; <b>조직도</b></div>
+        <div class="page-title-row"><h1>조직도</h1><span class="tag">ORGANIZATION</span></div>
+        <div class="card">
+          <div class="orgchart">
+            <div class="org-node">서장</div>
+            <div class="org-connector"></div>
+            <div class="org-node sub">부서장</div>
+            <div class="org-connector"></div>
+            <div class="org-branch">
+              <div class="org-node sub">수사과</div>
+              <div class="org-node sub">생활안전과</div>
+              <div class="org-node sub">형사과</div>
+              <div class="org-node sub">교통과</div>
+            </div>
+          </div>
+          <p style="font-size:11.5px;color:#9aa0b0;text-align:center;">※ 실제 부서명·직제는 서버 운영 방침에 맞게 자유롭게 바꿔주세요.</p>
+        </div>
+      </section>
+
+      <!-- ============ PAGE: 지명수배 조회 ============ -->
+      <section class="page" id="page-wanted">
+        <div class="breadcrumb">HOME &gt; 온라인 서비스 &gt; <b>지명수배 조회</b></div>
+        <div class="page-title-row"><h1>지명수배자 조회</h1><span class="tag">WANTED</span></div>
+        <div class="search-row">
+          <input type="text" id="wantedSearch" placeholder="이름으로 검색...">
+          <button onclick="filterTable('wantedSearch','wantedBody')">검색</button>
+        </div>
+        <table class="status-table">
+          <thead><tr><th>성명</th><th>혐의</th><th>현상금</th><th>상태</th></tr></thead>
+          <tbody id="wantedBody">
+            <tr><td class="svc-name">[성명]</td><td>[혐의 내용]</td><td>[금액]</td><td><span class="pill-warn">수배중</span></td></tr>
+            <tr><td class="svc-name">[성명]</td><td>[혐의 내용]</td><td>[금액]</td><td><span class="pill-warn">수배중</span></td></tr>
+            <tr><td class="svc-name">[성명]</td><td>[혐의 내용]</td><td>-</td><td><span class="pill-ok">검거</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ============ PAGE: 이용안내 ============ -->
+      <section class="page" id="page-info">
+        <div class="breadcrumb">HOME &gt; 이용안내</div>
+        <div class="page-title-row"><h1>이용안내</h1><span class="tag">INFO</span></div>
+        <div class="card info-block">
+          <h3>서비스 이용약관</h3>
+          <p>[본 사이트는 인천중기경찰서 RP 서버 운영을 위해 제작된 가상의 안내 페이지입니다. 이용 전 서버 규정을 반드시 확인해주세요.]</p>
+          <h3>개인정보 처리방침</h3>
+          <p>[실제 개인정보를 수집하지 않으며, 입력된 정보는 서버 내부 운영 목적 외에는 사용되지 않습니다. — 실제 운영 방침에 맞게 수정해주세요.]</p>
+          <h3>문의</h3>
+          <p>[디스코드 서버 문의 채널 링크나 운영진 연락처를 여기에 적어주세요.]</p>
+        </div>
+      </section>
+
+      <!-- ============ PAGE: 시험 결과조회 (본인 인증) ============ -->
+      <section class="page" id="page-lookup">
+        <div class="breadcrumb">HOME &gt; 전산정보 &gt; <b>시험 결과조회</b></div>
+        <div class="page-title-row"><h1>채용시험 결과조회</h1><span class="tag">VERIFY</span></div>
+        <p style="font-size:12.5px;color:#6a7185;margin-bottom:14px;">응시 완료 후 발급된 <b>조회코드</b>를 입력하면 본인의 결과를 확인할 수 있습니다.</p>
+        <div class="lookup-box">
+          <input type="text" id="lookupCode" placeholder="조회코드 입력 (예: IJ-XXXXXX)">
+          <button onclick="doLookup()">조회</button>
+        </div>
+        <div id="lookupResult"><div class="lookup-empty">조회코드를 입력해주세요.</div></div>
+      </section>
+
+      <!-- ============ PAGE: 관리자 페이지 (운영진 전용) ============ -->
+      <section class="page" id="page-admin">
+        <div class="breadcrumb">HOME &gt; 전산정보 &gt; <b>관리자 페이지</b></div>
+        <div class="page-title-row"><h1>채용시험 응시 현황 (운영진)</h1><span class="tag">ADMIN</span></div>
+        <div id="adminLocked" class="admin-locked">
+          🔒 운영진 전용 페이지입니다.<br>비밀번호를 입력해야 응시자 명단을 볼 수 있습니다.
+          <br><button onclick="unlockAdmin()">비밀번호 입력하고 열람</button>
+        </div>
+        <div id="adminPanel" style="display:none;">
+          <div class="admin-toolbar">
+            <span id="adminCount">이 브라우저에 저장된 응시 기록만 표시됩니다</span>
+            <span>
+              <button onclick="renderAdminTable()">새로고침</button>
+              <button onclick="clearAllSubmissions()">전체 기록 초기화</button>
+            </span>
+          </div>
+          <table class="status-table">
+            <thead><tr><th>조회코드</th><th>닉네임</th><th>희망부서</th><th>점수</th><th>결과</th><th>응시일시</th><th></th></tr></thead>
+            <tbody id="adminBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside>
+      <div class="quicklinks">
+        <h4>자주 찾는 서비스</h4>
+        <ul>
+          <li>인게임 범칙금·과태료 조회</li>
+          <li>운전면허 정보조회</li>
+          <li>사이버범죄 신고 및 상담</li>
+          <li>유실물 통합포털</li>
+          <li>대원 고충 상담센터</li>
+        </ul>
+      </div>
+      <div class="promo-box"><div class="k">대원 가혹행위 근절</div><div class="v">소원수리 및 익명 신고센터 운영</div></div>
+      <div class="promo-box"><div class="k">팩션 민원</div><div class="v">부패·공익신고 / 억울한 민원 제기</div></div>
+      <div class="report-box">
+        <div class="lbl">인게임 긴급 범죄신고</div>
+        <div class="num">112</div>
+        <div class="sub">※ RP 서버 내 가상 신고 코드입니다.<br>실제 112 신고와는 무관합니다.</div>
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    <div class="footer-notice">
+      <div>알려드립니다. 본 현황판은 시스템 외부 모니터링이 아닌 프론트엔드 자체 진단 로그를 표시합니다.</div>
+      <a href="#">개인정보처리방침</a>
+    </div>
+    <div class="footer-bottom">
+      인천중기경찰서 통합관리 시스템 | Copyright © 2026 인천중기경찰서, All Rights Reserved.
+      <span class="disclaimer">※ 본 페이지는 롤플레이(RP) 서버 운영을 위해 제작된 가상의 현황판이며, 대한민국 경찰청 등 실제 공공기관과 무관합니다.</span>
+    </div>
+  </footer>
+
+  <!-- ================= 채용공고 상세보기 모달 ================= -->
+  <div class="modal-overlay" id="noticeDetailOverlay" onclick="if(event.target===this) closeNoticeDetail()">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div>
+          <h3 id="noticeDetailTitle">공지 제목</h3>
+          <div class="sub" id="noticeDetailMeta">공지 · 날짜</div>
+        </div>
+        <button class="modal-close" onclick="closeNoticeDetail()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="noticeDetailBody" style="white-space:pre-wrap;font-size:13px;color:#3c4152;line-height:1.8;margin:0 0 18px;"></p>
+        <button class="modal-submit" onclick="closeNoticeDetail()">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 팩션원 채용 온라인 CBT 응시 모달 ================= -->
+  <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this) closeModal()">
+    <div class="modal-box exam-wide">
+      <div class="modal-head">
+        <div>
+          <h3 id="examHeadTitle">인천중기경찰서 온라인 채용시험 (CBT)</h3>
+          <div class="sub" id="examHeadSub">응시자 정보 입력</div>
+        </div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <!-- STEP 1: 응시자 정보 -->
+        <div class="exam-step show" id="stepInfo">
+          <div class="exam-notice">
+            ・ 시험은 총 <b id="qCountNotice">5</b>문항, 제한시간 <b>10분</b>입니다.<br>
+            ・ 시험 시작 후에는 중간에 멈출 수 없으니 준비되었을 때 시작해주세요.<br>
+            ・ 60점(6문항) 이상 획득 시 합격 처리됩니다.
+          </div>
+          <form id="infoForm" onsubmit="startExam(event)">
+            <label>디스코드 닉네임</label>
+            <input type="text" id="applicantName" placeholder="예: 홍길동#0001" required>
+            <label>희망 부서</label>
+            <select id="applicantDept">
+              <option>수사과</option>
+              <option>생활안전과</option>
+              <option>형사과</option>
+              <option>교통과</option>
+            </select>
+            <button type="submit" class="modal-submit">시험 시작</button>
+          </form>
+        </div>
+
+        <!-- STEP 2: 시험 응시 -->
+        <div class="exam-step" id="stepExam">
+          <div class="exam-topbar">
+            <span class="progress-txt" id="qProgress">문항 1 / 10</span>
+            <span class="exam-timer" id="examTimer">10:00</span>
+          </div>
+          <div class="progress-bar"><div class="progress-bar-fill" id="progressFill"></div></div>
+          <div class="exam-question" id="qText">문제 내용</div>
+          <div class="exam-options" id="qOptions"></div>
+          <div class="exam-nav">
+            <button type="button" id="prevBtn" onclick="prevQuestion()">이전</button>
+            <button type="button" id="nextBtn" class="primary" onclick="nextQuestion()">다음</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: 결과 -->
+        <div class="exam-step" id="stepResult">
+          <div class="result-score">
+            <div class="num" id="scoreNum">0점</div>
+            <div class="badge" id="scoreBadge">결과</div>
+          </div>
+          <div class="result-info">
+            <div><b>응시자</b> &nbsp; <span id="resultName"></span></div>
+            <div><b>희망 부서</b> &nbsp; <span id="resultDept"></span></div>
+            <div><b>정답</b> &nbsp; <span id="resultCorrect"></span> / <span id="resultTotal"></span> 문항</div>
+          </div>
+          <p style="font-size:12.5px;color:#6a7185;text-align:center;margin:0 0 8px;">결과가 접수되었습니다. 아래 조회코드를 저장해두시면 [시험 결과조회] 메뉴에서 다시 확인할 수 있습니다.</p>
+          <p style="text-align:center;margin-bottom:18px;">조회코드 &nbsp;<span class="code-chip" id="resultCode">-</span></p>
+          <button class="modal-submit" onclick="closeModal()">닫기</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<script>
+  /* ---------------- 탭 전환 ---------------- */
+  function showPage(id, navEl){
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+
+    document.querySelectorAll('#mainNav a').forEach(a => a.classList.remove('active'));
+    const topNavLink = document.querySelector('#mainNav a[data-page="' + id + '"]');
+    if (topNavLink) topNavLink.classList.add('active');
+
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  document.querySelectorAll('#mainNav a[data-page]').forEach(a=>{
+    a.addEventListener('click', () => showPage(a.dataset.page, a));
+  });
+
+  /* ---------------- 표 검색 필터 ---------------- */
+  function filterTable(inputId, tbodyId){
+    const q = document.getElementById(inputId).value.trim().toLowerCase();
+    const rows = document.getElementById(tbodyId).querySelectorAll('tr');
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      row.style.display = text.includes(q) ? '' : 'none';
+    });
+  }
+
+  /* =========================================================
+     채용공고 게시판 목록
+     아래 RECRUIT_NOTICES 배열에 객체를 추가/삭제하면 게시판에 자동 반영됩니다.
+     - top: true 면 상단에 빨간 "공지" 뱃지로 고정
+     - cat: 전체/공채/특채/안내 탭 필터에 사용되는 분류
+     - date: 화면에 표시되는 날짜 텍스트 (형식 자유)
+     - isNew: true 면 제목 옆에 빨간 NEW 표시
+     - content: 공지를 클릭했을 때 보여줄 본문 내용 (줄바꿈은 \n 으로)
+     ========================================================= */
+  const RECRUIT_NOTICES = [
+    { top:true,  cat:"안내", title:"2026년 인천중기경찰서 신입 대원 공개채용 계획 공고", date:"2026-08-01", isNew:false,
+      content:"2026년 인천중기경찰서 신입 대원 공개채용 계획을 다음과 같이 공고합니다.\n\n1. 채용 부서: 수사과, 생활안전과, 형사과, 교통과\n2. 응시 방법: 본 사이트 [채용공고] 메뉴 내 '온라인 응시하기' 버튼 클릭 후 CBT 응시\n3. 합격 기준: 총점 60점 이상\n4. 문의: 디스코드 서버 채용 문의 채널" },
+    { top:true,  cat:"안내", title:"채용시험 부정행위(동시접속·대리응시) 처리 기준 안내", date:"2026-08-01", isNew:false,
+      content:"공정한 채용 절차를 위해 아래 행위 적발 시 응시 자격이 즉시 취소됩니다.\n\n- 대리응시 및 정답 공유\n- 동일 인물의 중복(동시) 응시\n- 부정한 방법으로 조회코드를 취득/도용하는 행위\n\n적발 시 서버 운영진 판단에 따라 별도 제재가 있을 수 있습니다." },
+    { top:false, cat:"공채", title:"2026년 하반기 신입 대원 공개채용 온라인 CBT 시행 안내", date:"2026-08-10", isNew:true,
+      content:"2026년 하반기 신입 대원 공개채용 온라인 CBT 시험을 아래와 같이 시행합니다.\n\n- 문항 수: 10문항\n- 제한시간: 10분\n- 합격 기준: 60점 이상\n- 응시 방법: 본 페이지 상단 '온라인 응시하기' 버튼 클릭" },
+    { top:false, cat:"공채", title:"수사과·생활안전과·형사과·교통과 부서별 정원 안내", date:"2026-08-05", isNew:false,
+      content:"이번 채용에서 모집하는 부서별 정원은 아래와 같습니다.\n\n- 수사과: 정원 안내 예정\n- 생활안전과: 정원 안내 예정\n- 형사과: 정원 안내 예정\n- 교통과: 정원 안내 예정\n\n※ 실제 서버 운영 방침에 맞게 자유롭게 수정해주세요." },
+    { top:false, cat:"특채", title:"경력자(구 팩션 경력 보유자) 특별채용 서류 접수 안내", date:"2026-07-28", isNew:false,
+      content:"타 팩션 경력이 있는 대원을 대상으로 서류전형 중심의 특별채용을 진행합니다.\n\n- 접수 방법: 디스코드 DM 또는 지정 채널 문의\n- 제출 서류: 경력 스크린샷 등 증빙자료\n- 심사 후 개별 안내" },
+    { top:false, cat:"안내", title:"채용시험 합격자 발표 및 디스코드 임명 절차 안내", date:"2026-07-20", isNew:false,
+      content:"CBT 합격자는 순차적으로 디스코드를 통해 개별 안내드리며, 임명식 절차 참여 후 정식 대원으로 등록됩니다.\n\n※ 결과 발급 시 받은 조회코드는 [시험 결과조회] 메뉴에서 재확인 가능하니 잘 보관해주세요." },
+  ];
+
+  function renderRecruitList(cat){
+    const wrap = document.getElementById('recruitList');
+    wrap.innerHTML = '';
+    RECRUIT_NOTICES
+      .filter(n => cat === '전체' || n.cat === cat)
+      .forEach(n => {
+        const row = document.createElement('div');
+        row.className = 'recruit-row';
+        row.innerHTML = `
+          <span class="badge${n.top ? ' top' : ''}">${n.top ? '공지' : n.cat}</span>
+          <span class="title">${n.title}${n.isNew ? '<span class="new">N</span>' : ''}</span>
+          <span class="date">${n.date}</span>`;
+        row.addEventListener('click', () => openNoticeDetail(n));
+        wrap.appendChild(row);
+      });
+    if(!wrap.children.length){
+      wrap.innerHTML = '<div class="lookup-empty">해당 분류의 공고가 없습니다.</div>';
+    }
+  }
+  function filterRecruit(cat, btnEl){
+    document.querySelectorAll('#recruitTabs button').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+    renderRecruitList(cat);
+  }
+  renderRecruitList('전체');
+
+  /* ---------------- 공지 상세보기 모달 ---------------- */
+  function openNoticeDetail(n){
+    document.getElementById('noticeDetailTitle').textContent = n.title;
+    document.getElementById('noticeDetailMeta').textContent = (n.top ? '공지' : n.cat) + ' · ' + n.date;
+    document.getElementById('noticeDetailBody').textContent = n.content || '(등록된 상세 내용이 없습니다.)';
+    document.getElementById('noticeDetailOverlay').classList.add('open');
+  }
+  function closeNoticeDetail(){
+    document.getElementById('noticeDetailOverlay').classList.remove('open');
+  }
+
+
+  /* =========================================================
+     채용 온라인 CBT 응시 로직
+     문제를 바꾸고 싶으면 아래 EXAM_QUESTIONS 배열만 수정하면 됩니다.
+     - q: 문제 텍스트
+     - options: 보기 배열 (원하는 개수만큼 추가/삭제 가능)
+     - answer: 정답 보기의 인덱스 (0부터 시작)
+     문항 수를 늘리거나 줄여도 자동으로 반영됩니다.
+     ========================================================= */
+  const EXAM_QUESTIONS = [
+    { q: "신고 접수 시 가장 먼저 확인해야 하는 정보는 무엇인가요?", options: ["신고자 위치", "신고자 취미", "오늘 날씨", "해당 없음"], answer: 0 },
+    { q: "무전 교신 시 '수신 확인'을 의미하는 코드로 옳은 것은?", options: ["7-11", "10-4", "1+1", "해당 없음"], answer: 1 },
+    { q: "용의자를 검거했을 때 가장 먼저 해야 할 절차는?", options: ["즉시 석방", "사진 촬영 후 SNS 업로드", "미란다 원칙 고지", "해당 없음"], answer: 2 },
+    { q: "동료 대원과 협업할 때 가장 중요한 태도는?", options: ["독단적 행동", "신속하고 정확한 정보 공유", "무전 무시", "해당 없음"], answer: 1 },
+    { q: "시민을 응대할 때 지켜야 할 기본 원칙은?", options: ["반말 사용", "무시", "친절하고 공정한 태도", "해당 없음"], answer: 2 },
+    { q: "순찰 중 수상한 차량을 발견했을 때 가장 먼저 해야 할 일은?", options: ["차량 번호판 확인 및 상황실 보고", "즉시 정지 요구 없이 추월", "무시하고 지나감", "해당 없음"], answer: 0 },
+    { q: "사건 현장 보존의 목적으로 가장 적절한 것은?", options: ["증거 훼손 방지", "구경꾼 모으기", "빠른 청소", "해당 없음"], answer: 0 },
+    { q: "긴급 출동 시 우선적으로 고려해야 할 사항은?", options: ["개인 SNS 업데이트", "안전한 경로와 신속한 대응", "동료와의 잡담", "해당 없음"], answer: 1 },
+    { q: "대원 간 정보 공유 시 지켜야 할 원칙은?", options: ["비공식 채널로만 공유", "정확한 사실만 전달", "추측성 정보도 자유롭게 전달", "해당 없음"], answer: 1 },
+    { q: "민원 응대 중 갈등 상황이 발생했을 때 가장 바람직한 대응은?", options: ["감정적으로 대응", "선임에게 즉시 보고 및 침착한 대응", "그냥 자리를 이탈", "해당 없음"], answer: 1 },
+  ];
+  const EXAM_TIME_SEC = 600;   // 제한시간(초). 10분 = 600
+  const PASS_RATIO = 0.6;      // 합격 기준 (60%)
+
+  let examAnswers = [];
+  let examCurrent = 0;
+  let examTimerId = null;
+  let examSecondsLeft = EXAM_TIME_SEC;
+  let applicant = { name: "", dept: "" };
+
+  document.getElementById('qCountNotice').textContent = EXAM_QUESTIONS.length;
+  document.getElementById('recruitQCount').textContent = EXAM_QUESTIONS.length;
+
+  function openModal(){
+    document.getElementById('modalOverlay').classList.add('open');
+    resetExamToInfoStep();
+  }
+  function closeModal(){
+    document.getElementById('modalOverlay').classList.remove('open');
+    clearInterval(examTimerId);
+  }
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+
+  function resetExamToInfoStep(){
+    clearInterval(examTimerId);
+    examAnswers = new Array(EXAM_QUESTIONS.length).fill(null);
+    examCurrent = 0;
+    examSecondsLeft = EXAM_TIME_SEC;
+    document.getElementById('infoForm').reset();
+    switchStep('stepInfo', '응시자 정보 입력');
+  }
+
+  function switchStep(stepId, subtitle){
+    document.querySelectorAll('.exam-step').forEach(s => s.classList.remove('show'));
+    document.getElementById(stepId).classList.add('show');
+    document.getElementById('examHeadSub').textContent = subtitle;
+  }
+
+  function startExam(e){
+    e.preventDefault();
+    applicant.name = document.getElementById('applicantName').value.trim();
+    applicant.dept = document.getElementById('applicantDept').value;
+    switchStep('stepExam', '시험 응시 중');
+    renderQuestion();
+    startTimer();
+    addLine('INFO', `채용시험 응시 시작 — 응시자: ${applicant.name}`);
+  }
+
+  function startTimer(){
+    updateTimerDisplay();
+    examTimerId = setInterval(() => {
+      examSecondsLeft--;
+      updateTimerDisplay();
+      if(examSecondsLeft <= 0){
+        clearInterval(examTimerId);
+        finishExam();
+      }
+    }, 1000);
+  }
+  function updateTimerDisplay(){
+    const m = Math.floor(examSecondsLeft / 60).toString().padStart(2,'0');
+    const s = (examSecondsLeft % 60).toString().padStart(2,'0');
+    document.getElementById('examTimer').textContent = `${m}:${s}`;
+  }
+
+  function renderQuestion(){
+    const total = EXAM_QUESTIONS.length;
+    const item = EXAM_QUESTIONS[examCurrent];
+    document.getElementById('qProgress').textContent = `문항 ${examCurrent + 1} / ${total}`;
+    document.getElementById('progressFill').style.width = `${((examCurrent) / total) * 100}%`;
+    document.getElementById('qText').textContent = item.q;
+
+    const optWrap = document.getElementById('qOptions');
+    optWrap.innerHTML = '';
+    item.options.forEach((opt, i) => {
+      const selected = examAnswers[examCurrent] === i;
+      const div = document.createElement('label');
+      div.className = 'exam-option' + (selected ? ' selected' : '');
+      div.innerHTML = `<input type="radio" name="opt" ${selected ? 'checked' : ''}> ${opt}`;
+      div.addEventListener('click', () => {
+        examAnswers[examCurrent] = i;
+        renderQuestion();
+      });
+      optWrap.appendChild(div);
+    });
+
+    document.getElementById('prevBtn').disabled = (examCurrent === 0);
+    document.getElementById('nextBtn').textContent = (examCurrent === total - 1) ? '제출' : '다음';
+  }
+
+  function prevQuestion(){
+    if(examCurrent > 0){ examCurrent--; renderQuestion(); }
+  }
+  function nextQuestion(){
+    if(examCurrent < EXAM_QUESTIONS.length - 1){
+      examCurrent++;
+      renderQuestion();
+    } else {
+      clearInterval(examTimerId);
+      finishExam();
+    }
+  }
+
+  function finishExam(){
+    let correct = 0;
+    EXAM_QUESTIONS.forEach((item, i) => { if(examAnswers[i] === item.answer) correct++; });
+    const total = EXAM_QUESTIONS.length;
+    const score = Math.round((correct / total) * 100);
+    const passed = (correct / total) >= PASS_RATIO;
+    const code = genLookupCode();
+
+    document.getElementById('scoreNum').textContent = `${score}점`;
+    const badge = document.getElementById('scoreBadge');
+    badge.textContent = passed ? '합격' : '불합격';
+    badge.className = 'badge ' + (passed ? 'badge-pass' : 'badge-fail');
+    document.getElementById('resultName').textContent = applicant.name || '(닉네임 미입력)';
+    document.getElementById('resultDept').textContent = applicant.dept;
+    document.getElementById('resultCorrect').textContent = correct;
+    document.getElementById('resultTotal').textContent = total;
+    document.getElementById('resultCode').textContent = code;
+
+    switchStep('stepResult', '응시 결과');
+
+    saveSubmission({ code, name: applicant.name, dept: applicant.dept, correct, total, score, passed, ts: nowStr() })
+      .then(() => {
+        addLine(passed ? 'OK' : 'WARN', `채용시험 결과 접수 — ${applicant.name} / ${score}점 / ${passed ? '합격' : '불합격'} / 코드 ${code}`);
+      })
+      .catch(err => {
+        addLine('WARN', `결과 저장 실패 — 코드 ${code} / ${err.message}`);
+      });
+  }
+
+  /* =========================================================
+     결과 저장 · 조회 · 관리자 인증
+     ─────────────────────────────────────────────────────────
+     SHEET_API_URL 에 구글 Apps Script 배포 URL을 붙여넣으면
+     모든 응시 결과가 구글 시트 한 곳에 실시간으로 모입니다.
+     (채팅에서 드린 apps-script-code.gs 참고)
+     URL을 아직 안 붙였다면 이 브라우저(localStorage)에만 임시로
+     저장되며, 다른 사람/다른 기기에서는 보이지 않습니다.
+     ========================================================= */
+  const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbzOe7yEpxDpbXf8kXFcaM4Qrsk27reRY0fAm3r4FG20u84-uwjw__UQHFjom0JCERnY/exec'; // 예: 'https://script.google.com/macros/s/AKfycb.../exec'
+  const STORAGE_KEY = 'ijpd_exam_submissions';
+  const ADMIN_PASSWORD = 'admin1234'; // 관리자 비밀번호. 원하는 값으로 바꿔서 사용하세요. (시트 방식이면 apps-script-code.gs 안의 값도 같이 바꿔주세요)
+
+  function genLookupCode(){
+    return 'IJ-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+  }
+  function sheetConfigured(){
+    return !!SHEET_API_URL;
+  }
+
+  /* ---- localStorage 백업 저장소 (SHEET_API_URL 미설정 시 사용) ---- */
+  function getLocalSubmissions(){
+    try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch(e){ return []; }
+  }
+  function saveLocalSubmission(entry){
+    const list = getLocalSubmissions();
+    list.unshift(entry);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  }
+
+  function saveSubmission(entry){
+    if(sheetConfigured()){
+      // Apps Script 웹앱은 폼 전송 방식(text/plain)이 CORS 이슈 없이 가장 안정적입니다.
+      return fetch(SHEET_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(entry)
+      }).then(r => { if(!r.ok) throw new Error('서버 응답 오류'); });
+    }
+    return new Promise((resolve, reject) => {
+      try{ saveLocalSubmission(entry); resolve(); }
+      catch(err){ reject(err); }
+    });
+  }
+
+  function doLookup(){
+    const code = document.getElementById('lookupCode').value.trim().toUpperCase();
+    const box = document.getElementById('lookupResult');
+    if(!code){ box.innerHTML = '<div class="lookup-empty">조회코드를 입력해주세요.</div>'; return; }
+    box.innerHTML = '<div class="lookup-empty">조회 중...</div>';
+
+    const showResult = (found) => {
+      if(!found){
+        box.innerHTML = '<div class="lookup-empty">일치하는 조회코드가 없습니다.</div>';
+        return;
+      }
+      box.innerHTML = `
+        <div class="lookup-result">
+          <div><b>닉네임</b> &nbsp; ${found.name || '-'}</div>
+          <div><b>희망부서</b> &nbsp; ${found.dept || '-'}</div>
+          <div><b>점수</b> &nbsp; ${found.score}점 (${found.correct}/${found.total})</div>
+          <div><b>결과</b> &nbsp; ${found.passed ? '합격' : '불합격'}</div>
+          <div><b>응시일시</b> &nbsp; ${found.ts}</div>
+        </div>`;
+    };
+
+    if(sheetConfigured()){
+      fetch(`${SHEET_API_URL}?code=${encodeURIComponent(code)}`)
+        .then(r => r.json())
+        .then(showResult)
+        .catch(() => { box.innerHTML = '<div class="lookup-empty">조회 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</div>'; });
+    }else{
+      showResult(getLocalSubmissions().find(s => s.code === code));
+    }
+  }
+
+  function unlockAdmin(){
+    const pw = prompt('관리자 비밀번호를 입력하세요.');
+    if(pw === null) return;
+    if(!sheetConfigured() && pw !== ADMIN_PASSWORD){ alert('비밀번호가 일치하지 않습니다.'); return; }
+    document.getElementById('adminLocked').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    renderAdminTable(pw);
+  }
+
+  let lastAdminPw = '';
+  function renderAdminTable(pw){
+    if(pw !== undefined) lastAdminPw = pw;
+    const body = document.getElementById('adminBody');
+    const countEl = document.getElementById('adminCount');
+
+    const draw = (list) => {
+      body.innerHTML = '';
+      countEl.textContent = `응시 기록 · 총 ${list.length}건` + (sheetConfigured() ? ' (구글 시트 연동)' : ' (이 브라우저에만 저장됨)');
+      if(!list.length){
+        body.innerHTML = '<tr><td colspan="7" class="lookup-empty">저장된 응시 기록이 없습니다.</td></tr>';
+        return;
+      }
+      list.forEach((s, i) => {
+        const tr = document.createElement('tr');
+        const delCell = sheetConfigured()
+          ? '<span class="detail">시트에서 직접 삭제</span>'
+          : `<button class="del-btn" onclick="deleteLocalSubmission(${i})">삭제</button>`;
+        tr.innerHTML = `
+          <td>${s.code}</td><td>${s.name || '-'}</td><td>${s.dept || '-'}</td>
+          <td>${s.score}점</td>
+          <td>${s.passed ? '<span class="pill-ok">합격</span>' : '<span class="pill-warn">불합격</span>'}</td>
+          <td class="detail">${s.ts}</td>
+          <td>${delCell}</td>`;
+        body.appendChild(tr);
+      });
+    };
+
+    if(sheetConfigured()){
+      body.innerHTML = '<tr><td colspan="7" class="lookup-empty">불러오는 중...</td></tr>';
+      fetch(`${SHEET_API_URL}?admin=1&pw=${encodeURIComponent(lastAdminPw)}`)
+        .then(r => r.json())
+        .then(data => {
+          if(data && data.error){
+            document.getElementById('adminLocked').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'none';
+            alert('비밀번호가 일치하지 않습니다.');
+            return;
+          }
+          draw(data);
+        })
+        .catch(() => { body.innerHTML = '<tr><td colspan="7" class="lookup-empty">불러오기 실패. 잠시 후 다시 시도해주세요.</td></tr>'; });
+    }else{
+      draw(getLocalSubmissions());
+    }
+  }
+  function deleteLocalSubmission(i){
+    const list = getLocalSubmissions();
+    list.splice(i, 1);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    renderAdminTable();
+  }
+  function clearAllSubmissions(){
+    if(sheetConfigured()){
+      alert('구글 시트 연동 상태에서는 시트에서 직접 행을 삭제해주세요.');
+      return;
+    }
+    if(!confirm('이 브라우저에 저장된 모든 응시 기록을 삭제할까요?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    renderAdminTable();
+  }
+
+  /* ---------------- 상태 현황판 로그 ---------------- */
+  const logEl = document.getElementById('log');
+  const events = [
+    ['INFO','POLICE-NET 모니터링 시스템 스크립트 엔진 시작.'],
+    ['OK','인천중기경찰서 웹 포털 헬스체크 통과 (12ms).'],
+    ['OK','대원 정보 DB 접속망 연결 확인 (45ms).'],
+    ['INFO','Discord OAuth 인증 API 토큰 갱신 대기열 확인.'],
+    ['OK','대원 필기시험 서버 세션 동기화 완료.'],
+    ['INFO','정기 상태 점검 스케줄러 대기 중 (60s 주기).'],
+    ['WARN','대원 정보 DB 접속망 응답지연 감지 (112ms) — 자동 재시도 완료.'],
+    ['OK','전체 서비스 정상 범위 복귀 확인.'],
+  ];
+  let idx = 0;
+  function pad(n){return n.toString().padStart(2,'0');}
+  function nowStr(){
+    const d = new Date();
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+  function levelClass(lvl){ return lvl==='OK' ? 'lvl-ok' : (lvl==='WARN' ? 'lvl-warn' : 'lvl-info'); }
+  function addLine(lvl, msg){
+    const div = document.createElement('div');
+    div.className = 'line';
+    div.innerHTML = `<span class="t">[${nowStr()}]</span> <span class="${levelClass(lvl)}">[${lvl}]</span> ${msg}`;
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+  addLine('INFO', 'POLICE-NET 모니터링 시스템 스크립트 엔진 시작.');
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!prefersReduced){
+    setInterval(() => {
+      const [lvl, msg] = events[idx % events.length];
+      addLine(lvl, msg);
+      idx++;
+    }, 3200);
+  }
+
+  document.getElementById('refreshBtn').addEventListener('click', function(){
+    this.classList.add('loading');
+    addLine('INFO', '수동 상태 새로고침 요청 접수.');
+    setTimeout(() => {
+      this.classList.remove('loading');
+      addLine('OK', '전체 시스템 상태 재확인 완료 — 이상 없음.');
+    }, 900);
+  });
+</script>
+
+</body>
+</html>
