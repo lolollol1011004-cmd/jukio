@@ -1011,7 +1011,8 @@
       });
   }
 
-  const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxPFmbeiy3_u71vNPD_e4DdJZNRyfvFfOhxqOCX_ph_My9qg1j6bwUpdKfVHOcBTSJ1/exec';
+  const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbzOe7yEpxDpbXf8kXFcaM4Qrsk27reRY0fAm3r4FG20u84-uwjw__UQHFjom0JCERnY/exec';
+  const ROSTER_API_URL = 'https://script.google.com/macros/s/AKfycbz12q1RV5tIfyaZAfe_pbQs6ZXkeYXpQRkhYkEHoigm6SksNPH5DCdsIGoMcI5WiMxS/exec';
   const STORAGE_KEY = 'ijpd_exam_submissions';
   const ADMIN_PASSWORD = 'admin1234';
 
@@ -1164,10 +1165,14 @@
   let rosterCurrentCat = '전체';
   let lastRosterPw = '';
 
+  function rosterConfigured(){
+    return !!ROSTER_API_URL;
+  }
+
   function unlockRoster(){
     const pw = prompt('대원 정보 DB 비밀번호를 입력하세요.');
     if(pw === null) return;
-    if(!sheetConfigured() && pw !== ADMIN_PASSWORD){ alert('비밀번호가 일치하지 않습니다.'); return; }
+    if(!rosterConfigured() && pw !== ADMIN_PASSWORD){ alert('비밀번호가 일치하지 않습니다.'); return; }
     lastRosterPw = pw;
     document.getElementById('rosterLocked').style.display = 'none';
     document.getElementById('rosterPanel').style.display = 'block';
@@ -1177,8 +1182,8 @@
   function loadRoster(){
     const countEl = document.getElementById('rosterCount');
     countEl.textContent = '불러오는 중...';
-    if(sheetConfigured()){
-      fetch(`${SHEET_API_URL}?roster=1&pw=${encodeURIComponent(lastRosterPw)}`)
+    if(rosterConfigured()){
+      fetch(`${ROSTER_API_URL}?roster=1&pw=${encodeURIComponent(lastRosterPw)}`)
         .then(r => r.json())
         .then(data => {
           if(data && data.error){
@@ -1212,7 +1217,7 @@
     const countEl = document.getElementById('rosterCount');
     const list = rosterCurrentCat === '전체' ? rosterData : rosterData.filter(r => r.dept === rosterCurrentCat);
     body.innerHTML = '';
-    countEl.textContent = `대원 명단 · 총 ${list.length}명` + (sheetConfigured() ? ' (구글 시트 연동)' : ' (예시 데이터 — 시트 미연동)');
+    countEl.textContent = `대원 명단 · 총 ${list.length}명` + (rosterConfigured() ? ' (구글 시트 연동)' : ' (예시 데이터 — 시트 미연동)');
     if(!list.length){
       body.innerHTML = '<tr><td colspan="4" class="lookup-empty">해당 부서의 대원이 없습니다.</td></tr>';
       return;
